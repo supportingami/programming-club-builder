@@ -1,11 +1,6 @@
 {
   "appId": "com.example.app",
   "appName": "programming-club",
-  "bundledWebRuntime": false,
   "webDir": "dist",
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    }
-  }
+  "plugins": {}
 }

@@ -14,7 +14,8 @@ jobs:
       - name: Checkout app builder code
         uses: actions/checkout@v4
         with:
-          repository: "supportingami/programming-club-builder.git"
+          repository: "supportingami/programming-club-builder"
+          ref: main
 
       - name: Checkout app repo code
         uses: actions/checkout@v4

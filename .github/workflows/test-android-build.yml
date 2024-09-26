@@ -5,8 +5,9 @@ on:
   push:
     branches:
       - main
+      - feat/android-build-workflows
 jobs:
   android_build:
-    uses: supportingami/programming-club-builder/.github/workflows/android-build.yml@main
+    uses: supportingami/programming-club-builder/.github/workflows/android-build.yml@feat/android-build-workflows
     with:
       dist-path: demo

@@ -1,0 +1,53 @@
+# Create android release AAB
+name: Android - Build
+on:
+  workflow_call:
+jobs:
+  android_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app builder code
+        uses: actions/checkout@v4
+        with:
+          repository: "supportingami/programming-club-builder.git"
+
+      - name: Checkout app repo code
+        uses: actions/checkout@v4
+        with:
+          path: "src"
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      # TODO - generate assets
+      # TODO - allow capacitor overrides
+      - name: Add android platform
+        run: npx cap add android
+
+        # Re-sync as remote cache won't populate files during nx build command
+      - name: Sync Capacitor
+        run: npx cap sync
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Build Android Debug APK
+        working-directory: apps/picsa-apps/extension-app-native/android
+        run: ./gradlew :app:assembleDebug
+
+      - name: Build Android Release Bundle
+        working-directory: apps/picsa-apps/extension-app-native/android
+        run: ./gradlew :app:bundleRelease
+
+      - name: Save build artifacts

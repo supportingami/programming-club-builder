@@ -1,0 +1,10 @@
+# Test call of reusable workflow
+name: Test Android Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  android_build:
+    uses: supportingami/programming-club-builder/.github/workflows/android-build.yml@main

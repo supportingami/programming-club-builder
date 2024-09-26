@@ -3,3 +3,4 @@
 - [ ] Consider framework-specific template demo with intermediate build step
 - [ ] Consider template with full exposure to capacitor config and project src
 - [ ] Improve demo
+- [ ] Consider docker container/cloud-run implementation to enable faster builds

@@ -6,7 +6,6 @@ on:
       dist-path:
         description: path to folder containing code to include in app. Omit if code not in a subfolder
         type: string
-        default: ""
 jobs:
   android_build:
     runs-on: ubuntu-latest
@@ -14,7 +13,8 @@ jobs:
       - name: Checkout app builder code
         uses: actions/checkout@v4
         with:
-          repository: "supportingami/programming-club-builder.git"
+          repository: "supportingami/programming-club-builder"
+          ref: main
 
       - name: Checkout app repo code
         uses: actions/checkout@v4
@@ -23,11 +23,24 @@ jobs:
           sparse-checkout: ${{ inputs.dist-path }}
           sparse-checkout-cone-mode: false
 
+      - name: Move repo code in nested folder
+        if: ${{ inputs.dist-path }}
+        run: mv  dist/${{ inputs.dist-path }}/* dist
+
+      - name: Debug checkout files
+        run: |
+          echo $(ls)
+          echo $(ls dist)
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
           cache: npm
+
+      # Install required 3rd-party dependencies. Use 'ci' command to ensure install consistent
+      - name: Install dependencies
+        run: npm ci
 
       # TODO - generate assets
       # TODO - allow capacitor overrides
@@ -39,24 +52,24 @@ jobs:
         run: npx cap sync
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: "zulu"
           java-version: "17"
           cache: "gradle"
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
 
-      - name: Build Android Debug Bundle
+      - name: Build Android Debug APK
         working-directory: ./android
         run: ./gradlew :app:assembleDebug
 
-     - name: Upload Debug Bundle
+      - name: Upload Debug Bundle
         uses: actions/upload-artifact@v4
         with:
-          name: debug_aab
-          path: ./android/app/build/outputs/bundle/debug/app-debug.aab
+          name: android
+          path: ./android/app/build/outputs/apk/debug/app-debug.apk
 
       # - name: Build Android Release Bundle
       #   working-directory: ./android

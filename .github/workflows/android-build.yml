@@ -1,11 +1,23 @@
-# Create android release AAB
-name: Android - Build
+# Reusable action to generate an android app from another repo
+# containing bundled web code
+name: Android Build
 on:
   workflow_call:
     inputs:
       dist-path:
         description: path to folder containing code to include in app. Omit if code not in a subfolder
         type: string
+      icon-path:
+        description: path to a png image image to use for android icon
+        type: string
+      app-name:
+        description: name of app to display on android device
+        type: string
+        default: Programming Club
+      app-id:
+        description: identifier of app for use on android device
+        type: string
+        default: club.programming.app
 jobs:
   android_build:
     runs-on: ubuntu-latest
@@ -23,15 +35,6 @@ jobs:
           sparse-checkout: ${{ inputs.dist-path }}
           sparse-checkout-cone-mode: false
 
-      - name: Move repo code in nested folder
-        if: ${{ inputs.dist-path }}
-        run: mv  dist/${{ inputs.dist-path }}/* dist
-
-      - name: Debug checkout files
-        run: |
-          echo $(ls)
-          echo $(ls dist)
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -42,12 +45,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # TODO - generate assets
-      # TODO - allow capacitor overrides
+      # If the exernal repo code is already in a folder, e.g. `build/index.html`, then it will be populated
+      # with the extra top-level folder, `dist/build/index.html`. Move all subfolder files one level higher
+      - name: Move repo code in nested folder
+        if: ${{ inputs.dist-path }}
+        run: mv  dist/${{ inputs.dist-path }}/* dist
+
+      - name: Add app icon
+        if: ${{ inputs.icon-path }}
+        run: |
+          mkdir assets
+          cp  dist/${{ inputs.icon-path }} assets/icon.png 
+          npx capacitor-assets generate --android
+
+      - name: Update capacitor config
+        uses: restackio/update-json-file-action@2.1
+        with:
+          file: capacitor.config.json
+          fields: "{'appId': '${{inputs.app-id}}', 'appName': '${{inputs.app-name}}'}"
+
       - name: Add android platform
         run: npx cap add android
 
-        # Re-sync as remote cache won't populate files during nx build command
       - name: Sync Capacitor
         run: npx cap sync
 
@@ -70,7 +89,3 @@ jobs:
         with:
           name: android
           path: ./android/app/build/outputs/apk/debug/app-debug.apk
-
-      # - name: Build Android Release Bundle
-      #   working-directory: ./android
-      #   run: ./gradlew :app:bundleRelease

@@ -1,6 +1,6 @@
 {
-  "appId": "com.example.app",
-  "appName": "programming-club",
+  "appId": "club.programming.app",
+  "appName": "Programming Club",
   "webDir": "dist",
   "plugins": {
     "SplashScreen": {

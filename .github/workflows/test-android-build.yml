@@ -1,5 +1,4 @@
-# Test call of reusable workflow
-name: Test Android Build
+name: Demo Android Build
 on:
   workflow_dispatch:
   push:
@@ -10,3 +9,6 @@ jobs:
     uses: supportingami/programming-club-builder/.github/workflows/android-build.yml@main
     with:
       dist-path: demo
+      icon-path: logo.png
+      app-name: Programming Club Demo
+      app-id: club.programming.app

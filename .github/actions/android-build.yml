@@ -2,6 +2,11 @@
 name: Android - Build
 on:
   workflow_call:
+    inputs:
+      dist-path:
+        description: path to folder containing code to include in app. Omit if code not in a subfolder
+        type: string
+        default: ""
 jobs:
   android_build:
     runs-on: ubuntu-latest
@@ -14,8 +19,9 @@ jobs:
       - name: Checkout app repo code
         uses: actions/checkout@v4
         with:
-          path: "src"
-          fetch-depth: 0
+          path: "dist"
+          sparse-checkout: ${{ inputs.dist-path }}
+          sparse-checkout-cone-mode: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -42,12 +48,16 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: Build Android Debug APK
-        working-directory: apps/picsa-apps/extension-app-native/android
+      - name: Build Android Debug Bundle
+        working-directory: ./android
         run: ./gradlew :app:assembleDebug
 
-      - name: Build Android Release Bundle
-        working-directory: apps/picsa-apps/extension-app-native/android
-        run: ./gradlew :app:bundleRelease
+     - name: Upload Debug Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug_aab
+          path: ./android/app/build/outputs/bundle/debug/app-debug.aab
 
-      - name: Save build artifacts
+      # - name: Build Android Release Bundle
+      #   working-directory: ./android
+      #   run: ./gradlew :app:bundleRelease

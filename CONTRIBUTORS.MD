@@ -20,7 +20,6 @@ npx capacitor-assets generate
 Once the platform has been added code can be compiled and imported into the android app
 
 ```bash
-npm run build
 npx cap sync
 ```
 

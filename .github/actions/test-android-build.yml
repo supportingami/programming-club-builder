@@ -8,3 +8,5 @@ on:
 jobs:
   android_build:
     uses: supportingami/programming-club-builder/.github/workflows/android-build.yml@main
+    with:
+      dist-path: demo

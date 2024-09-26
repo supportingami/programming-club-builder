@@ -62,7 +62,7 @@ jobs:
         uses: restackio/update-json-file-action@2.1
         with:
           file: capacitor.config.json
-          fields: "{'appId': '${{inputs.app-id}}', 'appName': '${{inputs.app-name}}'}"
+          fields: '{"appId": "${{inputs.app-id}}", "appName": "${{inputs.app-name}}"}'
 
       - name: Add android platform
         run: npx cap add android

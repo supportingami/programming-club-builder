@@ -1,5 +1,10 @@
 # Reusable action to generate an android app from another repo
 # containing bundled web code
+
+# TODO - check if can go straight from codesandbox to app... (?)
+# TODO - consider publishing template repo to code-sandobx (similar to sandbox basic js template)
+# Or small app to handle it?
+
 name: Android Build
 on:
   workflow_call:

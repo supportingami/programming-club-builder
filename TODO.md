@@ -1,0 +1,5 @@
+- [ ] Improve Readme
+- [ ] Create template repository with github action demo and lightweight server
+- [ ] Consider framework-specific template demo with intermediate build step
+- [ ] Consider template with full exposure to capacitor config and project src
+- [ ] Improve demo

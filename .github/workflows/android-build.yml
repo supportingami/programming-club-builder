@@ -24,6 +24,11 @@ jobs:
           sparse-checkout: ${{ inputs.dist-path }}
           sparse-checkout-cone-mode: false
 
+      - name: Debug checkout files
+        run: |
+          echo(ls)
+          echo(ls dist)
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:

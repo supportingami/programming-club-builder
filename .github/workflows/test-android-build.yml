@@ -10,4 +10,4 @@ jobs:
   android_build:
     uses: supportingami/programming-club-builder/.github/workflows/android-build.yml@feat/android-build-workflows
     with:
-      dist-path: demo/
+      dist-path: demo

@@ -62,7 +62,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Build Android Debug Bundle
+      - name: Build Android Debug APK
         working-directory: ./android
         run: ./gradlew :app:assembleDebug
 
@@ -70,8 +70,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: debug_aab
-          path: ./android/app/build/outputs
-          # path: ./android/app/build/outputs/bundle/debug/app-debug.aab
+          path: ./android/app/build/outputs/apk/debug/app-debug.apk
 
       # - name: Build Android Release Bundle
       #   working-directory: ./android

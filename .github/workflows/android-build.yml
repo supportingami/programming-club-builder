@@ -51,13 +51,6 @@ jobs:
         if: ${{ inputs.dist-path }}
         run: mv  dist/${{ inputs.dist-path }}/* dist
 
-      - name: Add app icon
-        if: ${{ inputs.icon-path }}
-        run: |
-          mkdir assets
-          cp  dist/${{ inputs.icon-path }} assets/icon.png 
-          npx capacitor-assets generate --android
-
       - name: Update capacitor config
         uses: restackio/update-json-file-action@2.1
         with:
@@ -66,6 +59,13 @@ jobs:
 
       - name: Add android platform
         run: npx cap add android
+
+      - name: Add app icon
+        if: ${{ inputs.icon-path }}
+        run: |
+          mkdir assets
+          cp  dist/${{ inputs.icon-path }} assets/icon.png 
+          npx capacitor-assets generate --android
 
       - name: Sync Capacitor
         run: npx cap sync

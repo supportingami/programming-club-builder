@@ -17,3 +17,7 @@ In this file paste the code
 ```
 
 ## Test
+
+Once the action has finished it will provide download links to android debug apk
+
+This can be installed directly on any android device
